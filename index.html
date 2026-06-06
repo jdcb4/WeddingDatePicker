@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Wedding Date Picker, the app that can always find a reason your date will not work."
+    />
+    <title>Wedding Date Picker</title>
+    <link rel="preload" href="assets/wedding-planning-desk.png" as="image" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell" aria-labelledby="page-title">
+      <section class="picker-panel">
+        <div class="brand-line">Wedding Date Picker</div>
+        <h1 id="page-title">Wedding Date Picker</h1>
+        <p class="tagline">Tap once. Receive one deeply reasonable objection.</p>
+
+        <div class="date-stage" aria-live="polite" aria-atomic="true">
+          <div class="date-label">Current candidate</div>
+          <div id="dateDisplay" class="date-display">Tap the button</div>
+          <div id="dateMeta" class="date-meta">Dates are limited to the next two years.</div>
+        </div>
+
+        <button id="pickButton" class="pick-button" type="button">
+          <span class="button-icon" aria-hidden="true"></span>
+          <span>Pick a date</span>
+        </button>
+
+        <p id="reasonText" class="reason-text">
+          The venue, the aunties, the group chat and the footy calendar are ready.
+        </p>
+      </section>
+
+      <aside class="rejections-panel" aria-labelledby="reject-title">
+        <div class="panel-heading">
+          <h2 id="reject-title">Rejected dates</h2>
+          <span id="rejectCount" class="reject-count">0</span>
+        </div>
+        <ol id="rejectList" class="reject-list">
+          <li class="empty-state">No disasters yet.</li>
+        </ol>
+      </aside>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
