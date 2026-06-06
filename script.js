@@ -477,27 +477,31 @@ function getAudioContext() {
 }
 
 function playTone({ frequency, duration, type = "sine", gain = 0.08, slideTo = null }) {
-  const context = getAudioContext();
-  if (!context) return;
+  try {
+    const context = getAudioContext();
+    if (!context) return;
 
-  const oscillator = context.createOscillator();
-  const volume = context.createGain();
-  const now = context.currentTime;
+    const oscillator = context.createOscillator();
+    const volume = context.createGain();
+    const now = context.currentTime;
 
-  oscillator.type = type;
-  oscillator.frequency.setValueAtTime(frequency, now);
-  if (slideTo) {
-    oscillator.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, now);
+    if (slideTo) {
+      oscillator.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+    }
+
+    volume.gain.setValueAtTime(0.0001, now);
+    volume.gain.exponentialRampToValueAtTime(gain, now + 0.01);
+    volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    oscillator.connect(volume);
+    volume.connect(context.destination);
+    oscillator.start(now);
+    oscillator.stop(now + duration + 0.02);
+  } catch {
+    audioContext = null;
   }
-
-  volume.gain.setValueAtTime(0.0001, now);
-  volume.gain.exponentialRampToValueAtTime(gain, now + 0.01);
-  volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-  oscillator.connect(volume);
-  volume.connect(context.destination);
-  oscillator.start(now);
-  oscillator.stop(now + duration + 0.02);
 }
 
 function playSpinTick(tick) {
@@ -661,6 +665,7 @@ function addRejection(date, reason) {
 }
 
 function toggleRejectedDates() {
+  if (!rejectToggle || !rejectList || !rejectionsPanel) return;
   const expanded = rejectToggle.getAttribute("aria-expanded") === "true";
   rejectToggle.setAttribute("aria-expanded", String(!expanded));
   rejectList.hidden = expanded;
@@ -703,4 +708,4 @@ function pickDate() {
 }
 
 pickButton.addEventListener("click", pickDate);
-rejectToggle.addEventListener("click", toggleRejectedDates);
+rejectToggle?.addEventListener("click", toggleRejectedDates);
