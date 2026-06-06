@@ -16,7 +16,7 @@
       <section class="picker-panel">
         <div class="brand-line">Wedding Date Picker</div>
         <h1 id="page-title">Wedding Date Picker</h1>
-        <p class="tagline">Tap once. Receive one deeply reasonable objection.</p>
+        <p class="tagline">Tap once. Get the wedding date of your dreams... so long as there's no problems.</p>
 
         <div class="date-stage" aria-live="polite" aria-atomic="true">
           <div class="date-label">Current candidate</div>
@@ -33,12 +33,21 @@
         </p>
       </section>
 
-      <aside class="rejections-panel" aria-labelledby="reject-title">
-        <div class="panel-heading">
+      <aside class="rejections-panel is-collapsed" aria-labelledby="reject-title">
+        <button
+          id="rejectToggle"
+          class="panel-heading"
+          type="button"
+          aria-expanded="false"
+          aria-controls="rejectList"
+        >
           <h2 id="reject-title">Rejected dates</h2>
-          <span id="rejectCount" class="reject-count">0</span>
-        </div>
-        <ol id="rejectList" class="reject-list">
+          <span class="reject-heading-meta">
+            <span id="rejectCount" class="reject-count">0</span>
+            <span class="chevron" aria-hidden="true"></span>
+          </span>
+        </button>
+        <ol id="rejectList" class="reject-list" hidden>
           <li class="empty-state">No disasters yet.</li>
         </ol>
       </aside>

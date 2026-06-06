@@ -1,6 +1,8 @@
 const dateDisplay = document.querySelector("#dateDisplay");
 const pickButton = document.querySelector("#pickButton");
 const reasonText = document.querySelector("#reasonText");
+const rejectionsPanel = document.querySelector(".rejections-panel");
+const rejectToggle = document.querySelector("#rejectToggle");
 const rejectList = document.querySelector("#rejectList");
 const rejectCount = document.querySelector("#rejectCount");
 
@@ -658,6 +660,13 @@ function addRejection(date, reason) {
   }
 }
 
+function toggleRejectedDates() {
+  const expanded = rejectToggle.getAttribute("aria-expanded") === "true";
+  rejectToggle.setAttribute("aria-expanded", String(!expanded));
+  rejectList.hidden = expanded;
+  rejectionsPanel.classList.toggle("is-collapsed", expanded);
+}
+
 function pickDate() {
   clearInterval(spinTimer);
   getAudioContext();
@@ -694,3 +703,4 @@ function pickDate() {
 }
 
 pickButton.addEventListener("click", pickDate);
+rejectToggle.addEventListener("click", toggleRejectedDates);
