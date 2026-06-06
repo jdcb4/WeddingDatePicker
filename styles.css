@@ -102,45 +102,49 @@ h1 {
 .date-stage {
   display: grid;
   gap: 6px;
-  min-height: 136px;
+  grid-template-rows: auto 1fr;
+  height: 156px;
   margin-bottom: 12px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 14px 0;
-}
-
-.date-label,
-.date-meta {
-  color: var(--muted);
-  font-size: 0.82rem;
-  font-weight: 700;
+  overflow: hidden;
 }
 
 .date-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .date-display {
+  display: flex;
+  align-items: center;
   width: fit-content;
   max-width: 100%;
-  min-height: 58px;
+  min-height: 0;
   color: var(--blue);
-  font-size: clamp(1.85rem, 9.6vw, 3.6rem);
+  font-size: clamp(1.75rem, 8.2vw, 3.2rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 0.96;
   letter-spacing: 0;
   overflow-wrap: anywhere;
 }
 
 .date-display.is-spinning {
-  color: var(--coral);
+  color: var(--blue);
+}
+
+.date-display.is-long {
+  font-size: clamp(1.48rem, 7vw, 2.75rem);
 }
 
 .date-display.is-rejected {
   margin: 4px 0;
   border: 6px solid #d71920;
   border-radius: 999px;
-  padding: 10px 16px 12px;
+  padding: 8px 16px 10px;
   color: #b51218;
   background: rgba(255, 236, 232, 0.86);
   box-shadow:
@@ -315,7 +319,11 @@ h2 {
   }
 
   .date-display {
-    font-size: clamp(2rem, 4.35vw, 4rem);
+    font-size: clamp(2rem, 4vw, 3.8rem);
+  }
+
+  .date-display.is-long {
+    font-size: clamp(1.8rem, 3.4vw, 3.2rem);
   }
 
   .pick-button {
@@ -354,12 +362,12 @@ h2 {
     font-size: 0.74rem;
   }
 
-  .date-meta {
-    font-size: 0.78rem;
+  .date-stage {
+    height: 148px;
   }
 
   .date-display.is-rejected {
     border-width: 5px;
-    padding: 8px 12px 10px;
+    padding: 7px 12px 9px;
   }
 }

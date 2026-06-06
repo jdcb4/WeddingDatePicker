@@ -1,5 +1,4 @@
 const dateDisplay = document.querySelector("#dateDisplay");
-const dateMeta = document.querySelector("#dateMeta");
 const pickButton = document.querySelector("#pickButton");
 const reasonText = document.querySelector("#reasonText");
 const rejectList = document.querySelector("#rejectList");
@@ -34,6 +33,7 @@ const monthNames = [
 
 let rejectionTotal = 0;
 let spinTimer = 0;
+let audioContext = null;
 
 const fixedDateReasons = [
   [1, 1, "New Year's Day, and half the guest list is still pretending resolutions count"],
@@ -462,6 +462,58 @@ function randomDateInWindow() {
   return addDays(today, offset);
 }
 
+function getAudioContext() {
+  if (!audioContext) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    audioContext = new AudioContextClass();
+  }
+  if (audioContext.state === "suspended") {
+    audioContext.resume();
+  }
+  return audioContext;
+}
+
+function playTone({ frequency, duration, type = "sine", gain = 0.08, slideTo = null }) {
+  const context = getAudioContext();
+  if (!context) return;
+
+  const oscillator = context.createOscillator();
+  const volume = context.createGain();
+  const now = context.currentTime;
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(frequency, now);
+  if (slideTo) {
+    oscillator.frequency.exponentialRampToValueAtTime(slideTo, now + duration);
+  }
+
+  volume.gain.setValueAtTime(0.0001, now);
+  volume.gain.exponentialRampToValueAtTime(gain, now + 0.01);
+  volume.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+  oscillator.connect(volume);
+  volume.connect(context.destination);
+  oscillator.start(now);
+  oscillator.stop(now + duration + 0.02);
+}
+
+function playSpinTick(tick) {
+  playTone({
+    frequency: tick % 2 === 0 ? 540 : 680,
+    duration: 0.035,
+    type: "square",
+    gain: 0.035,
+  });
+}
+
+function playRejectBuzz() {
+  playTone({ frequency: 180, slideTo: 90, duration: 0.34, type: "sawtooth", gain: 0.13 });
+  window.setTimeout(() => {
+    playTone({ frequency: 120, slideTo: 70, duration: 0.22, type: "sawtooth", gain: 0.11 });
+  }, 120);
+}
+
 function nthWeekdayOfMonth(date) {
   return Math.ceil(date.getDate() / 7);
 }
@@ -569,12 +621,11 @@ function getDateReason(date) {
 }
 
 function renderCandidate(date, spinning = false) {
-  dateDisplay.textContent = formatter.format(date);
+  const dateText = formatter.format(date);
+  dateDisplay.textContent = dateText;
   dateDisplay.classList.toggle("is-spinning", spinning);
+  dateDisplay.classList.toggle("is-long", dateText.length > 25);
   if (spinning) dateDisplay.classList.remove("is-rejected");
-  dateMeta.textContent = `Between ${shortFormatter.format(normaliseDate(new Date()))} and ${shortFormatter.format(
-    twoYearsFromToday(),
-  )}`;
 }
 
 function twoYearsFromToday() {
@@ -609,6 +660,7 @@ function addRejection(date, reason) {
 
 function pickDate() {
   clearInterval(spinTimer);
+  getAudioContext();
   pickButton.disabled = true;
   pickButton.querySelector("span:last-child").textContent = "Consulting excuses...";
   dateDisplay.classList.remove("is-rejected");
@@ -621,6 +673,9 @@ function pickDate() {
   spinTimer = window.setInterval(() => {
     ticks += 1;
     renderCandidate(randomDateInWindow(), true);
+    if (ticks % 2 === 0) {
+      playSpinTick(ticks);
+    }
 
     if (ticks >= maxTicks) {
       clearInterval(spinTimer);
@@ -628,6 +683,7 @@ function pickDate() {
       const reason = getDateReason(finalDate);
       renderCandidate(finalDate, false);
       dateDisplay.classList.add("is-rejected");
+      playRejectBuzz();
       reasonText.textContent = `Uh oh, that's ${reason}. Better pick again.`;
       reasonText.classList.add("has-result");
       addRejection(finalDate, reason);
@@ -638,6 +694,3 @@ function pickDate() {
 }
 
 pickButton.addEventListener("click", pickDate);
-dateMeta.textContent = `Between ${shortFormatter.format(normaliseDate(new Date()))} and ${shortFormatter.format(
-  twoYearsFromToday(),
-)}`;
