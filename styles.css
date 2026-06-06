@@ -121,6 +121,8 @@ h1 {
 }
 
 .date-display {
+  width: fit-content;
+  max-width: 100%;
   min-height: 58px;
   color: var(--blue);
   font-size: clamp(1.85rem, 9.6vw, 3.6rem);
@@ -132,6 +134,19 @@ h1 {
 
 .date-display.is-spinning {
   color: var(--coral);
+}
+
+.date-display.is-rejected {
+  margin: 4px 0;
+  border: 6px solid #d71920;
+  border-radius: 999px;
+  padding: 10px 16px 12px;
+  color: #b51218;
+  background: rgba(255, 236, 232, 0.86);
+  box-shadow:
+    0 0 0 4px rgba(215, 25, 32, 0.14),
+    0 12px 26px rgba(181, 18, 24, 0.16);
+  transform: rotate(-1deg);
 }
 
 .pick-button {
@@ -341,5 +356,10 @@ h2 {
 
   .date-meta {
     font-size: 0.78rem;
+  }
+
+  .date-display.is-rejected {
+    border-width: 5px;
+    padding: 8px 12px 10px;
   }
 }

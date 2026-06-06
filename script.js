@@ -17,6 +17,20 @@ const shortFormatter = new Intl.DateTimeFormat("en-AU", {
   month: "short",
   year: "numeric",
 });
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 let rejectionTotal = 0;
 let spinTimer = 0;
@@ -124,6 +138,61 @@ const fixedDateReasons = [
 ];
 
 const specificDateReasons = [
+  [2026, 3, 7, "a Canberra Raiders game day against the Sea Eagles, and someone will check the score during the vows"],
+  [2026, 3, 8, "Collingwood's Opening Round game against St Kilda, and the Magpie Army has already taken the MCG hostage"],
+  [2026, 3, 13, "a Canberra Raiders game day in New Zealand, and the timezone excuse is too good to waste"],
+  [2026, 3, 14, "a double booking with both Wests Tigers and Collingwood game days, so the sports fans are unusable"],
+  [2026, 3, 19, "a Canberra Raiders game day against the Bulldogs, and the green-machine contingent will be emotionally unavailable"],
+  [2026, 3, 21, "a Wests Tigers game day, and hope is a full-contact sport"],
+  [2026, 3, 27, "a Wests Tigers game day in Auckland, and the group chat will become a live ladder predictor"],
+  [2026, 3, 29, "a Canberra Raiders Sunday game, which is basically a formal objection"],
+  [2026, 4, 2, "Collingwood playing Brisbane on Easter Thursday, and the Pies fans have already left spiritually"],
+  [2026, 4, 5, "a Canberra Raiders game day, and Newcastle away trips create too many alibis"],
+  [2026, 4, 6, "a Wests Tigers Easter Monday game, and that is already a family argument with studs"],
+  [2026, 4, 10, "Collingwood at Gather Round, and every South Australian venue has declared a footy emergency"],
+  [2026, 4, 11, "a Canberra Raiders game day in Perth, and the travel budget just made a noise"],
+  [2026, 4, 12, "a Wests Tigers game day, and nobody can process Sunday vows plus Sunday football"],
+  [2026, 4, 16, "Collingwood v Carlton, and that rivalry cannot be seated politely"],
+  [2026, 4, 17, "a Canberra Raiders game day, and Storm week makes everyone weirdly tense"],
+  [2026, 4, 18, "a Wests Tigers game day, and Campbelltown has prior emotional custody"],
+  [2026, 4, 23, "Wests Tigers v Canberra Raiders, so the wedding would be the undercard"],
+  [2026, 4, 25, "Anzac Day and Essendon v Collingwood, so the calendar has already filed an objection"],
+  [2026, 4, 30, "Collingwood v Hawthorn at the MCG, and the old-footy grudges need the room"],
+  [2026, 5, 2, "a Canberra Raiders game day, and the Titans fixture is apparently non-negotiable"],
+  [2026, 5, 3, "a Wests Tigers game day, and the Sharks have already eaten the timeline"],
+  [2026, 5, 9, "Geelong v Collingwood, and the Pies fans will treat the drive like a pilgrimage"],
+  [2026, 5, 10, "both Raiders and Wests Tigers game day, which is too much rugby league for one guest list"],
+  [2026, 5, 16, "a Wests Tigers Magic Round game day, and Brisbane has stolen all the hotel rooms"],
+  [2026, 5, 21, "a Canberra Raiders Thursday night game, which means Friday morning apologies"],
+  [2026, 5, 23, "Collingwood v West Coast, and the Magpie Army has booked the noise allocation"],
+  [2026, 5, 30, "a Wests Tigers game day, and the reception playlist cannot compete with a Bulldogs match"],
+  [2026, 5, 31, "a Canberra Raiders Sunday game, and the green jumpers have right of way"],
+  [2026, 6, 5, "a Canberra Raiders game day against the Roosters, and the sports argument will dress itself as analysis"],
+  [2026, 6, 7, "a Wests Tigers game day, and also the eve of Collingwood's Big Freeze appointment"],
+  [2026, 6, 8, "Collingwood v Melbourne in the King's Birthday Big Freeze match, and the calendar is already wearing a beanie"],
+  [2026, 6, 13, "a Canberra Raiders game day, and Parramatta away fixtures are basically a logistics trap"],
+  [2026, 6, 14, "a Wests Tigers game day, and Leichhardt Oval has the guest list by the throat"],
+  [2026, 6, 20, "both Wests Tigers and Collingwood game day, so the ceremony would need live score breaks"],
+  [2026, 6, 21, "a Canberra Raiders game day, and the Sunday afternoon slot owns the couch"],
+  [2026, 6, 27, "Collingwood v Richmond at the MCG, and the black-and-white noise will drown the vows"],
+  [2026, 6, 28, "both Raiders and Wests Tigers game day, which is a double-booked excuse with studs on"],
+  [2026, 7, 4, "both Wests Tigers and Collingwood game day, and the fixture computer clearly hates romance"],
+  [2026, 7, 10, "both Wests Tigers and Collingwood game day, so the date is already at capacity"],
+  [2026, 7, 11, "a Canberra Raiders game day, and Bulldogs away will create too many score-checkers"],
+  [2026, 7, 18, "both Raiders, Wests Tigers and Collingwood game day, which is legally too much football"],
+  [2026, 7, 23, "Adelaide v Collingwood, and Thursday-night Pies discourse cannot be contained"],
+  [2026, 7, 25, "Raiders v Wests Tigers, so the wedding would be a curtain-raiser with centrepieces"],
+  [2026, 7, 30, "Collingwood v Geelong on a Thursday night, and every neutral guest will stop being neutral"],
+  [2026, 8, 1, "a Canberra Raiders game day in Mudgee, and the away-trip excuses are already packed"],
+  [2026, 8, 2, "a Wests Tigers Sunday game, and the group chat has chosen footy"],
+  [2026, 8, 9, "both Raiders and Collingwood game day, and nobody can serve canapes through that much tension"],
+  [2026, 8, 15, "a Canberra Raiders game day, and the Sharks fixture has swallowed the afternoon"],
+  [2026, 8, 16, "a Wests Tigers game day, and Dragons week is not emotionally wedding-compatible"],
+  [2026, 8, 21, "a Canberra Raiders game day against the Broncos, and Friday night football has veto power"],
+  [2026, 8, 23, "a Wests Tigers game day against the Roosters, and brunch recovery is already doomed"],
+  [2026, 8, 29, "a Wests Tigers game day in Townsville, and the travel excuse is airtight"],
+  [2026, 9, 5, "a Canberra Raiders game day in Townsville, and finals maths will be too loud"],
+  [2026, 9, 6, "a Wests Tigers game day, and nobody wants Panthers-related stress near the cake"],
   [2026, 5, 15, "NRL Magic Round weekend, and Suncorp Stadium has absorbed every available voice"],
   [2026, 5, 16, "NRL Magic Round weekend, and Brisbane is already wearing every jersey it owns"],
   [2026, 5, 17, "NRL Magic Round weekend, and the hotel prices have discovered ambition"],
@@ -134,6 +203,103 @@ const specificDateReasons = [
   [2026, 10, 4, "the 2026 NRL Grand Final at Accor Stadium, and the reception would need a broadcast rights deal"],
   [2026, 10, 15, "the Rugby League World Cup opener, and every sports fan has entered international mode"],
   [2026, 11, 15, "the Rugby League World Cup finals, and nobody should compete with that many national anthems"],
+];
+
+const anniversaryDateReasons = [
+  [1, 3, "J.R.R. Tolkien's birthday, and someone will try to make the vows 14 hours long"],
+  [1, 8, "Elvis Presley's birthday, and the celebrant might enter by jumpsuit"],
+  [1, 10, "Tintin first appeared in print, and every clue says this date is cursed"],
+  [1, 15, "Wikipedia Day, so every relative will edit the facts in real time"],
+  [1, 19, "Dolly Parton's birthday, and the bar for rhinestones is too high"],
+  [1, 24, "International Day of Education, and nobody wants a pop quiz on table numbers"],
+  [1, 28, "Data Privacy Day, so the guest list cannot be shared with the caterer yet"],
+  [2, 1, "Harry Styles' birthday, and the playlist would become a constitutional issue"],
+  [2, 3, "the day the music died, and the DJ has taken that personally"],
+  [2, 7, "Charles Dickens' birthday, so the invoice will arrive in three volumes"],
+  [2, 10, "Lunar New Year season more often than not, and the calendar refuses to explain itself calmly"],
+  [2, 15, "Singles Awareness Day, which is a hostile environment for plus-one negotiations"],
+  [2, 18, "Pluto's discovery anniversary, and even planets get demoted on this date"],
+  [2, 23, "International Dog Biscuit Appreciation Day, so the pet table has prior claims"],
+  [2, 29, "leap day, and anniversaries every four years are too economical to be trusted"],
+  [3, 2, "Dr Seuss's birthday, and rhyming vows are not covered by insurance"],
+  [3, 7, "Alexander Graham Bell Day, and everyone will call during the ceremony"],
+  [3, 10, "Mario Day, and the ring bearer will demand a karting entrance"],
+  [3, 12, "the World Wide Web's birthday, so the livestream will absolutely fail"],
+  [3, 15, "the Ides of March, and stabbing the seating plan in the back is too literal"],
+  [3, 18, "Global Recycling Day, and reusing this excuse is sustainable"],
+  [3, 23, "World Meteorological Day, meaning the weather gets a formal vote"],
+  [3, 27, "World Theatre Day, and the speeches are dramatic enough already"],
+  [4, 3, "Find a Rainbow Day, and the photographer will chase lighting until midnight"],
+  [4, 8, "Draw a Bird Day, and the invitation designer cannot be given ideas"],
+  [4, 12, "International Day of Human Space Flight, and the budget is already in orbit"],
+  [4, 15, "Tax Day in the US, and the accountant guests are emotionally audited"],
+  [4, 18, "World Heritage Day, so the old family grudges are demanding protection"],
+  [4, 26, "Richter Scale Day, and the dance floor cannot pass seismic certification"],
+  [5, 2, "World Tuna Day, and seafood jokes have been banned from the speeches"],
+  [5, 3, "World Press Freedom Day, so the auntie newsletter cannot be restrained"],
+  [5, 6, "International No Diet Day, and the cake tasting needs sacred space"],
+  [5, 10, "World Lupus Day, and the date deserves more care than canape panic"],
+  [5, 15, "International Day of Families, and yours has enough agenda items already"],
+  [5, 18, "International Museum Day, so every family story becomes an exhibit"],
+  [5, 22, "World Goth Day, and the dress code will lose a negotiation"],
+  [5, 24, "World Schizophrenia Awareness Day, and the calendar says choose thoughtfully"],
+  [5, 28, "Amnesty International's founding anniversary, and several guests need pardons"],
+  [6, 2, "International Sex Workers' Day, so the date is reserved for adult conversations"],
+  [6, 3, "World Bicycle Day, and the transport plan has too many moving parts"],
+  [6, 6, "D-Day anniversary, so the date already carries enough history"],
+  [6, 9, "Donald Duck's screen debut anniversary, and one more formal outfit joke is too many"],
+  [6, 13, "World Softball Day, and throwing the bouquet is already sport enough"],
+  [6, 16, "Bloomsday, so the speeches would become modernist and impossible to follow"],
+  [6, 18, "International Sushi Day, and the caterer will try to upsell tiny boats"],
+  [6, 23, "International Women in Engineering Day, and the seating plan needs a structural engineer"],
+  [6, 26, "International Day Against Drug Abuse and Illicit Trafficking, so skip the suspicious bucks-party energy"],
+  [7, 2, "World UFO Day, and there are already enough unidentified relatives"],
+  [7, 6, "International Kissing Day, which is far too on the nose"],
+  [7, 10, "Nikola Tesla's birthday, so the lighting technician gets too much power"],
+  [7, 12, "Malala Day, and the date deserves a better cause than centrepieces"],
+  [7, 16, "World Snake Day, and the guest list has enough hissy behaviour"],
+  [7, 18, "Nelson Mandela International Day, so the date needs respect, not chair-cover discourse"],
+  [7, 22, "Pi Approximation Day, and the cake fractions will become political"],
+  [7, 29, "NASA's founding anniversary, and the budget has already left the atmosphere"],
+  [8, 3, "Watermelon Day, and the summer-themed favours would get out of hand"],
+  [8, 5, "Neil Armstrong's birthday, and one small step down the aisle is too easy a line"],
+  [8, 8, "International Cat Day, and the pet-sitter economy has collapsed"],
+  [8, 14, "World Lizard Day, and the groomsmen are already giving reptile energy"],
+  [8, 16, "National Rum Day in the US, and the bar tab cannot hear about it"],
+  [8, 21, "World Senior Citizens Day, and every grandparent has earned veto rights"],
+  [8, 24, "Pluto Demotion Day, which proves labels can change at the last minute"],
+  [8, 28, "the anniversary of Martin Luther King Jr's 'I Have a Dream' speech, so do not waste it on bonbonniere"],
+  [9, 5, "World Beard Day weekend territory, and the groom prep becomes unstable"],
+  [9, 10, "World Suicide Prevention Day, so the date deserves care and space"],
+  [9, 12, "International Day of the World's Indigenous Peoples season is still in the calendar's notes"],
+  [9, 15, "Wikipedia's birthday in Scots? Close enough for someone online to argue"],
+  [9, 18, "International Observe the Moon Night territory, and the photographer will overpromise"],
+  [9, 23, "International Day of Sign Languages, and the dance-floor signals are already confusing"],
+  [9, 26, "the usual AFL Grand Final danger zone, and Melbourne calendars have trauma"],
+  [9, 29, "International Coffee Day eve, and nobody should commit before caffeine"],
+  [10, 2, "International Day of Non-Violence, and the seating chart is not compliant"],
+  [10, 6, "Mad Hatter Day, and the hats would become a liability"],
+  [10, 9, "World Post Day, so the invitations would finally arrive and ruin the surprise"],
+  [10, 12, "Hugh Jackman's birthday, and someone will request a musical number"],
+  [10, 14, "World Standards Day, and the dress code fails certification"],
+  [10, 20, "World Statistics Day in some years, and the RSVP sample size is unacceptable"],
+  [10, 25, "Pablo Picasso's birthday, and the seating plan is already cubist"],
+  [10, 30, "Mischief Night, and the bucks party cannot be trusted near it"],
+  [11, 3, "Sandwich Day, and the late-night snack station will steal the reception"],
+  [11, 7, "Marie Curie's birthday, so the chemistry jokes become unbearable"],
+  [11, 10, "Sesame Street's premiere anniversary, and counting guests is hard enough"],
+  [11, 14, "World Diabetes Day, so dessert planning needs actual care"],
+  [11, 17, "International Students' Day, and half the cousins have exams in spirit"],
+  [11, 23, "Fibonacci Day, and the table layout will spiral"],
+  [11, 27, "Jimi Hendrix's birthday, and the guitarist will request a solo nobody approved"],
+  [12, 2, "Britney Spears' birthday, and one more 'Toxic' request will break the DJ"],
+  [12, 4, "International Cheetah Day, and the day is moving too fast already"],
+  [12, 8, "Pretend to Be a Time Traveler Day, and late RSVPs will abuse the concept"],
+  [12, 12, "Frank Sinatra's birthday, and the first dance will get standards it cannot meet"],
+  [12, 15, "International Tea Day, and the family gossip service is fully booked"],
+  [12, 18, "International Migrants Day, so airport logistics have a formal say"],
+  [12, 23, "Festivus, and the airing of grievances would consume the reception"],
+  [12, 29, "Tick Tock Day, and the wedding countdown is already too smug"],
 ];
 
 const weekPatternRules = [
@@ -193,47 +359,27 @@ const weekPatternRules = [
   },
 ];
 
-const catchAllReasons = [
-  "Mercury has not submitted a vendor insurance certificate",
-  "the seating chart font has entered mediation",
-  "the group chat will need at least six more business days to overreact",
-  "the celebrant has a suspiciously specific brunch conflict",
-  "the florist says that is a 'premium emotion' date",
-  "the venue coordinator used the phrase 'bespoke surcharge'",
-  "the good napkins are apparently seasonal",
-  "someone's cousin has a milestone birthday, probably",
-  "the weather app is giving too many opinions",
-  "the cake tasting would clash with pretending to save money",
-  "the DJ needs time to remove three forbidden songs from the playlist",
-  "the printer is spiritually opposed to place cards that day",
-  "the spreadsheet has circular references and so does the family",
-  "the bridal party has reached its maximum weekly admin load",
-  "the ring bearer logistics require a royal commission",
-  "the invitation envelopes are still in their healing era",
-  "the hotel block says 'limited availability' in a threatening tone",
-  "the confetti supplier is observing a personal day",
-  "the menu tasting would become a hostage negotiation",
-  "the best man speech is still legally too long",
-  "the dance floor needs more time to accept its fate",
-  "the dress code discourse has not cooled below room temperature",
-  "the aisle runner is having second thoughts",
-  "the honeymoon flights are doing surge pricing theatre",
-  "the centrepieces require a level of confidence nobody has earned",
-  "the family photo list is still missing three important grudges",
-  "the reception timeline has developed side quests",
-  "the RSVP deadline would become a suggestion, not a deadline",
-  "the gift registry is pretending a toaster is a personality",
-  "the vows need another pass for jokes that will survive grandparents",
-  "the hair trial cannot be rushed by mere love",
-  "the makeup trial has requested better lighting and fewer opinions",
-  "the bar tab has seen the guest list and resigned",
-  "the parking situation has become a philosophical problem",
-  "the wet-weather plan is just optimism wearing a blazer",
-  "the photo booth props are still negotiating custody",
-  "the seating plan puts two aunties within tactical range",
-  "the candle budget has exceeded the GDP of a small reception",
-  "the flower girl basket is missing its emotional support ribbon",
-  "the recovery brunch cannot recover from that date",
+const catchAllReasonMakers = [
+  (date) => `the ${ordinal(date.getDate())} of ${monthNames[date.getMonth()]}, and ordinal dates make the invitation typography look smug`,
+  (date) => `${formatter.format(date)} is exactly ${daysBetween(startOfYear(date), date) + 1} days into the year, which is too numerically specific to ignore`,
+  (date) => `week ${weekOfYear(date)} of ${date.getFullYear()}, and the spreadsheet says that week is already emotionally overbooked`,
+  (date) => `a ${weekdayName(date)}, and ${weekdayName(date)} weddings are how group chats become evidence`,
+  (date) => `only ${daysUntilEndOfMonth(date)} days before ${monthNames[date.getMonth()]} ends, so everyone will say "let's just wait until next month"`,
+  (date) => `${daysSinceMonthStarted(date)} days into ${monthNames[date.getMonth()]}, which is too early for invoices and too late for optimism`,
+  (date) => `the ${ordinal(nthWeekdayOfMonth(date))} ${weekdayName(date)} in ${monthNames[date.getMonth()]}, and that is suspiciously niche`,
+  (date) => `in ${seasonForDate(date)}, and ${seasonForDate(date)} has already lodged a weather objection`,
+  (date) => `a date with digits adding to ${dateDigitSum(date)}, and the numerology auntie has concerns`,
+  (date) => `${Math.abs(daysBetween(date, twoYearsFromToday()))} days before the two-year cutoff, which is cutting it emotionally fine`,
+  (date) => `too close to the ${monthNames[date.getMonth()]} calendar-page turn, and nobody has the stamina for a new tab`,
+  (date) => `the kind of ${weekdayName(date)} where people say "quick one" and disappear for six hours`,
+  (date) => `${monthNames[date.getMonth()]} already has public-holiday energy, even when it technically does not`,
+  (date) => `a ${date.getFullYear()} date, and the save-the-date magnet budget has not approved those digits`,
+  (date) => `the ${ordinal(date.getDate())}, which is too close to someone's rent, payday, or mysterious direct debit`,
+  (date) => `one of those ${monthNames[date.getMonth()]} dates where venues start saying "limited seasonal availability"`,
+  (date) => `a date whose ISO code is ${toIsoDate(date)}, and nobody wants a wedding that looks like a software ticket`,
+  (date) => `${weekdayName(date)} the ${ordinal(date.getDate())}, which sounds like a cursed children's book title`,
+  (date) => `inside quarter ${Math.floor(date.getMonth() / 3) + 1}, and quarterly planning has already ruined enough lives`,
+  (date) => `close enough to ${monthNames[(date.getMonth() + 1) % 12]} for everyone to suggest moving it there instead`,
 ];
 
 function normaliseDate(date) {
@@ -256,6 +402,56 @@ function sameDate(first, second) {
 
 function daysBetween(start, end) {
   return Math.round((normaliseDate(end) - normaliseDate(start)) / dayMs);
+}
+
+function startOfYear(date) {
+  return new Date(date.getFullYear(), 0, 1, 12);
+}
+
+function weekdayName(date) {
+  return new Intl.DateTimeFormat("en-AU", { weekday: "long" }).format(date);
+}
+
+function ordinal(value) {
+  const suffixes = ["th", "st", "nd", "rd"];
+  const teen = value % 100;
+  return `${value}${suffixes[(teen - 20) % 10] || suffixes[teen] || suffixes[0]}`;
+}
+
+function weekOfYear(date) {
+  return Math.ceil((daysBetween(startOfYear(date), date) + startOfYear(date).getDay() + 1) / 7);
+}
+
+function daysUntilEndOfMonth(date) {
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0, 12);
+  return daysBetween(date, lastDay);
+}
+
+function daysSinceMonthStarted(date) {
+  return date.getDate() - 1;
+}
+
+function seasonForDate(date) {
+  const month = date.getMonth();
+  if (month >= 2 && month <= 4) return "autumn";
+  if (month >= 5 && month <= 7) return "winter";
+  if (month >= 8 && month <= 10) return "spring";
+  return "summer";
+}
+
+function dateDigitSum(date) {
+  return toIsoDate(date)
+    .replaceAll("-", "")
+    .split("")
+    .reduce((total, digit) => total + Number(digit), 0);
+}
+
+function toIsoDate(date) {
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
 }
 
 function randomDateInWindow() {
@@ -339,7 +535,7 @@ function getDateReason(date) {
   });
   if (specificMatch) return specificMatch[3];
 
-  const exactMatch = fixedDateReasons.find(([month, day]) => {
+  const exactMatch = [...fixedDateReasons, ...anniversaryDateReasons].find(([month, day]) => {
     return date.getMonth() + 1 === month && date.getDate() === day;
   });
   if (exactMatch) return exactMatch[2];
@@ -369,12 +565,13 @@ function getDateReason(date) {
   }
 
   const dayIndex = daysBetween(new Date(date.getFullYear(), 0, 1, 12), date);
-  return catchAllReasons[dayIndex % catchAllReasons.length];
+  return catchAllReasonMakers[dayIndex % catchAllReasonMakers.length](date);
 }
 
 function renderCandidate(date, spinning = false) {
   dateDisplay.textContent = formatter.format(date);
   dateDisplay.classList.toggle("is-spinning", spinning);
+  if (spinning) dateDisplay.classList.remove("is-rejected");
   dateMeta.textContent = `Between ${shortFormatter.format(normaliseDate(new Date()))} and ${shortFormatter.format(
     twoYearsFromToday(),
   )}`;
@@ -414,6 +611,7 @@ function pickDate() {
   clearInterval(spinTimer);
   pickButton.disabled = true;
   pickButton.querySelector("span:last-child").textContent = "Consulting excuses...";
+  dateDisplay.classList.remove("is-rejected");
   reasonText.classList.remove("has-result");
   reasonText.textContent = "Checking public holidays, family politics, weather omens and sport fixtures.";
 
@@ -429,6 +627,7 @@ function pickDate() {
       const finalDate = randomDateInWindow();
       const reason = getDateReason(finalDate);
       renderCandidate(finalDate, false);
+      dateDisplay.classList.add("is-rejected");
       reasonText.textContent = `Uh oh, that's ${reason}. Better pick again.`;
       reasonText.classList.add("has-result");
       addRejection(finalDate, reason);
